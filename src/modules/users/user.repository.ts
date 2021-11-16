@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm'
 import { getManyBy, getSingleBy } from '../../helpers'
-import { Users } from './entities/user.entity'
+import { Users } from './user.entity'
 
 export const getUserBy = getSingleBy(Users)
 export const getUserManyBy = getManyBy(Users)

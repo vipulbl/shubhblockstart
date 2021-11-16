@@ -1,8 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common'
-import { EmailvalidationDto } from './dto/user.dto'
-import { Users } from './entities/user.entity'
-import { CreateUserDto } from './dto/create-user.dto'
-import { UpdateUserDto } from './dto/update-user.dto'
+import { EmailvalidationDto, CreateUserDto, UpdateUserDto } from './user.dto'
+import { Users } from './user.entity'
 import { getUserBy, getUserManyBy, UserRepository } from './user.repository'
 
 @Injectable()

@@ -1,36 +1,30 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { EmailvalidationDto } from './dto/user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm'
+import { Injectable, BadRequestException } from '@nestjs/common'
+import { EmailvalidationDto } from './dto/user.dto'
 import { Users } from './entities/user.entity'
+import { CreateUserDto } from './dto/create-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
+import { getUserBy, getUserManyBy, UserRepository } from './user.repository'
 
 @Injectable()
 export class UsersService {
+  constructor(public readonly userRepository: UserRepository) {}
 
-  constructor(@InjectRepository(Users) private userRepository: Repository<Users>){
-
+  create(CreateUserDto: CreateUserDto) {
+    return 'This action adds a new user'
   }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
-
-  async signup({ email }: EmailvalidationDto){
-    const query = this.userRepository.createQueryBuilder('users');
+  async signup({ email }: EmailvalidationDto) {
     try {
-
-      let dataexist:Users  = await query.where("users.email = :email", {email}).getOne();
+      const dataexist: Users = await getUserBy({ email: email })
 
       if (dataexist != undefined) {
         throw new BadRequestException('Email already exist.')
       }
 
-      let users = new Users();
-      users['email'] = email.trim();
-      users['status'] = 1;
-      await this.userRepository.save(users);
+      const users = new Users()
+      users['email'] = email.trim()
+      users['status'] = 1
+      await this.userRepository.save(users)
       //var dataInserted = await this.userRepository.insertRecord(dataToInsert);
 
       return 'Data successfully saved'
@@ -40,18 +34,18 @@ export class UsersService {
   }
 
   findAll() {
-    return `This action returns all users`;
+    return `This action returns all users`
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return `This action returns a #${id} user`
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    return `This action updates a #${id} user`
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return `This action removes a #${id} user`
   }
 }

@@ -2,23 +2,16 @@ import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { UsersModule } from './modules/users/users.module'
-import { Users } from './modules/users/entities/user.entity'
 import { TypeOrmModule } from '@nestjs/typeorm'
-
-const entities = [Users]
+import { ConfigService } from './shared/services/config.service'
+import { SharedModule } from './shared/shared.module'
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: `"localhost"`,
-      port: 5432,
-      username: `"postgres"`,
-      password: `"postgres"`,
-      database: `"postgres"`,
-      synchronize: false,
-      autoLoadEntities: true,
-      entities: entities,
+    TypeOrmModule.forRootAsync({
+      imports: [SharedModule],
+      useFactory: (configService: ConfigService) => configService.typeOrmConfig,
+      inject: [ConfigService],
     }),
     UsersModule,
   ],
